@@ -1,0 +1,27 @@
+FROM node:20-alpine
+
+# install nodemon
+RUN npm install -g nodemon
+
+#install pm2
+RUN npm install pm2 -g
+
+# Create app directory
+WORKDIR /HackYourBrain-Backend
+
+# Install app dependencies
+COPY package*.json ./ 
+
+# install dependencies
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# build the app
+RUN npm run build
+
+
+EXPOSE 3005
+
+CMD ["npm", "run", "dev"]

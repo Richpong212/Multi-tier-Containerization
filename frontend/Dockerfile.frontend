@@ -1,0 +1,32 @@
+# Stage 1: Build React app
+FROM node:20-alpine AS builder
+
+# Create app directory
+WORKDIR /HackYourBrain-Frontend
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Build the app
+RUN npm run build
+
+# Stage 2: Set up NGINX server
+FROM nginx:alpine
+
+# Remove the default NGINX configuration file
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy the build files from the previous stage to the NGINX web server directory
+COPY --from=builder /HackYourBrain-Frontend/build /usr/share/nginx/html
+
+# Expose port 80 to allow external access
+EXPOSE 80
+
+# Command to start NGINX when the container starts
+CMD ["nginx", "-g", "daemon off;"]

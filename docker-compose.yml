@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  ### Database ###
+  postgresql:
+    build:
+      context: ./Database
+      dockerfile: Dockerfile.postgresql
+    container_name: postgresql
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./Database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./Database/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    env_file:
+      - .env
+
+  ### Backend ###
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.backend
+    container_name: backend
+    ports:
+      - "3005:3005"
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./Backend:/HackYourBrain-Backend
+    env_file:
+      - .env
+
+  ### Memcached ###
+  memcached:
+    image: "memcached:latest"
+    container_name: memcached
+    ports:
+      - "11211:11211"
+    networks:
+      - backend
+
+  ### Frontend ###
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    networks:
+      - backend
+      - frontend
+    volumes:
+      - ./frontend:/HackYourBrain-Frontend
+    env_file:
+      - .env
+
+### Networks ###
+networks:
+  backend:
+    driver: bridge
+
+  frontend:
+    driver: bridge

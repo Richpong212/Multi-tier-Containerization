@@ -1,0 +1,17 @@
+typescript --save-dev
+ts-node
+nodemon 
+express
+@types/express
+dotenv
+@types/dotenv
+@types/nodemon
+memcached
+pg
+@types/pg
+cors
+@types/cors
+
+
+
+
