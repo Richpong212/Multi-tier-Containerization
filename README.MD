@@ -1,5 +1,7 @@
 # Multi-Tier Application Setup with Docker Compose
 
+![Docker-Containerization](docker.png)
+
 This Docker Compose configuration file sets up a multi-tier application environment using Docker. The setup includes containers for PostgreSQL, the backend server, Memcached, and the frontend web application.
 
 ## Services
