@@ -8,6 +8,10 @@ pipeline {
             }
         }
 
-        
+      stage ('Build the code') {
+            steps {
+                sh ' cd frontend && npm install && npm run build'
+            }
+        }  
     }
 }
