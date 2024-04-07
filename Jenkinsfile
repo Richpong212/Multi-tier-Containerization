@@ -10,7 +10,7 @@ pipeline {
 
         stage ('Build the code') {
             steps {
-                sh 'cd Multi-tier-Containerization && cd frontend && npm install && npm run build'
+                sh 'npm install && npm run build'
             }
         }
     }
