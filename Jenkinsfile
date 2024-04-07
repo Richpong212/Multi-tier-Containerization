@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:latest' // Use the latest Node.js Docker image
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket for Docker commands inside the container
-        }
-    }
+    agent any
 
     stages {
         stage('Fetch Code') {
