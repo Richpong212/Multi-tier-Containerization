@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+
+env:
+  AWS_REGION: us-east-1
 jobs:
   testing:
     runs-on: ubuntu-latest
@@ -25,3 +28,22 @@ jobs:
         run: cd frontend && npm install
 
       # frontend run tests
+
+  BUild_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Build and deploy to ECR
+        uses: appleboy/docker-ecr-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          scret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          registry: ${{secrets.REGISTRY}}
+          repo: codegenitor
+          region: ${{ env.AWS_REGION}}
+          tags: latest, ${{ github.run_number}}
+          daemon_off: false
+          dockerfile: ./frontend/Dockerfile
+          content: ./
