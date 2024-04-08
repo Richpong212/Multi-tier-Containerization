@@ -1,0 +1,27 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2
+
+      # frontend setup
+      - name: Setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: "21.x"
+
+      # frontend install dependencies
+      - name: Install dependencies
+        run: cd frontend && npm install
+
+      # frontend run tests
