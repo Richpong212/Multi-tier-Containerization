@@ -30,6 +30,7 @@ jobs:
       # frontend run tests
 
   BUild_and_deploy:
+    needs: testing
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
