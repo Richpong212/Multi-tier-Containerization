@@ -47,4 +47,4 @@ jobs:
           tags: latest, ${{ github.run_number}}
           daemon_off: false
           dockerfile: ./frontend/Dockerfile
-          content: ./
+          content: ./frontend
