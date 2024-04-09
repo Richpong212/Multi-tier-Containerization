@@ -27,8 +27,7 @@ jobs:
       - name: Install dependencies
         run: cd frontend && npm install
 
-      # frontend run tests
-
+  # frontend run tests
   BUild_and_deploy:
     needs: testing
     runs-on: ubuntu-latest
@@ -36,6 +35,7 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v4
 
+      # frontend build
       - name: Build and deploy to ECR
         uses: appleboy/docker-ecr-action@master
         with:
