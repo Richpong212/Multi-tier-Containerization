@@ -29,22 +29,23 @@ jobs:
 
       # frontend run tests
 
+  # Deploy to ECR
   BUild_and_deploy:
     needs: testing
     runs-on: ubuntu-latest
     steps:
-      - name: Code checkout
-        uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v2
 
-      - name: Build and deploy to ECR
-        uses: appleboy/docker-ecr-action@master
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v2
         with:
-          access_key: ${{ secrets.AWS_ACCESS_KEY_ID}}
-          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          registry: ${{secrets.REGISTRY}}
-          repo: codegenitor
-          region: ${{ env.AWS_REGION}}
-          tags: latest, ${{ github.run_number}}
-          daemon_off: false
-          dockerfile: ./frontend/Dockerfile.frontend
-          content: ./frontend
+          registry: ${{ secrets.REGISTRY }}
+          aws-access-key-id: ${{ AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ AWS_SECRET_ACCESS_KEY }}
+
+      - name: Builder Docker Image
+        run: |
+          cd frontend
+          docker build -t ${{ secrets.REGISTRY }}/codegenitor:${{github.run_number}} .
+          docker push ${{ secrets.REGISTRY }}/codegenitor:${{github.run_number}}
