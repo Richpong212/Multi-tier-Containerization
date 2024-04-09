@@ -10,6 +10,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
+
 jobs:
   testing:
     runs-on: ubuntu-latest
@@ -17,35 +18,28 @@ jobs:
       - name: Code checkout
         uses: actions/checkout@v2
 
-      # frontend setup
       - name: Setup nodejs
         uses: actions/setup-node@v2
         with:
           node-version: "21.x"
 
-      # frontend install dependencies
       - name: Install dependencies
         run: cd frontend && npm install
 
-      # frontend run tests
-
-  # Deploy to ECR
   BUild_and_deploy:
     needs: testing
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
         with:
-          registry: ${{ secrets.REGISTRY }}
-          aws-access-key-id: ${{ AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ AWS_SECRET_ACCESS_KEY }}
+          registry: ${{ secrets.AWS_REGISTRY_URL }}
 
-      - name: Builder Docker Image
+      - name: Build and push Docker image
         run: |
           cd frontend
-          docker build -t ${{ secrets.REGISTRY }}/codegenitor:${{github.run_number}} .
-          docker push ${{ secrets.REGISTRY }}/codegenitor:${{github.run_number}}
+          docker build -t ${{ secrets.AWS_REGISTRY_URL }}/codegenitor:${{ github.run_number }} .
+          docker push ${{ secrets.AWS_REGISTRY_URL }}/codegenitor:${{ github.run_number }}
