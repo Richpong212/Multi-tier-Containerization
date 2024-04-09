@@ -37,14 +37,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build and deploy to ECR
-        uses: aws-actions/amazon-ecr-login@v2
+        uses: appleboy/docker-ecr-action@master
         with:
-          region: ${{ env.AWS_REGION }}
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          registry: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-          dockerfile: frontend/Dockerfile
-          repository-name: frontend
-          create-repo: false
-          tags: latest, ${{ github.run_number }}
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          registry: ${{secrets.REGISTRY}}
+          repo: codegenitor
+          region: ${{ env.AWS_REGION}}
+          tags: latest, ${{ github.run_number}}
           daemon_off: false
+          dockerfile: ./frontend/Dockerfile.frontend
+          content: ./frontend
